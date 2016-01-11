@@ -1,46 +1,24 @@
 package stockExchange.app;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import java.util.logging.Logger;
 
 public class App {
-	private static ApplicationContext context;
-	private static final BigDecimal startBalance = new BigDecimal(10000.0);
-	
-	static String[] springConfig = { "spring/applicationContext.xml", "spring/databaseContext.xml" };
-
+	private static final Logger LOGGER = Logger.getLogger(App.class.getName());
 	
 	public static void main(String[] args) throws org.springframework.expression.ParseException, IOException {
-		context = new ClassPathXmlApplicationContext(springConfig);
-		Beans game = context.getBean(Beans.class);
 		
+		Player player = new Player();
 		
-		System.out.println("************** STOCK EXCHANGE **************");
+		LOGGER.info("************** STOCK EXCHANGE **************");
 
-		game.getLoader().loadData();
-		game.getStockExchange().setFirstData();
-		game.getWallet().setStartWalletBalance(startBalance);
-		
-		
-		int it = 0;
-		while(it < game.getStockExchange().getAmountOfDays()) {
-			game.getBrocker().order(game.getWallet().getRiskyStrategy().listOfRequests());
-			it++;
-		}
-		
-		System.out.println("Strategy: " + game.getWallet().getRiskyStrategy().getName());
-		System.out.println(game.getRepository().count());
-		System.out.println("wallet balance: " + game.getWallet().getWalletBalance());
-		System.out.println("stocks balance: " + game.getWallet().getStocksBalance());
-		System.out.println("SUM: " +  game.getWallet().getSumWallet());
+		LOGGER.info("Start balance : " + player.getStartBalance());
+		LOGGER.info("Last balance : " + player.getLastBalance());
+		LOGGER.info("Stocks balance : " + player.getStocksBalance());
+		LOGGER.info("Sum : " + player.getSum());
 
-
-		System.out.println("************** ENDING PROGRAM *****************");
+		LOGGER.info("************** ENDING PROGRAM *****************");
 
 	}
-	
 	
 }

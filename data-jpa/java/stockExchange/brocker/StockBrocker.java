@@ -20,7 +20,7 @@ public class StockBrocker {
 	private StockExchange stockExchange;
 	@Autowired
 	private Wallet wallet;
-
+	
 	public StockBrocker() {
 
 	}
@@ -30,7 +30,7 @@ public class StockBrocker {
 			QuotationObject requestQuotation = findCurrentQuotationByName(req.getName());
 			buyStock(requestQuotation, req);
 			sellStock(requestQuotation, req);
-		}
+		}	
 	}
 
 	public void buyStock(QuotationObject requestQuotation, OrderRequest req) {
@@ -64,7 +64,7 @@ public class StockBrocker {
 	}
 
 	private List<QuotationObject> getCurrentQuotations() {
-		return getStockExchange().getCurrentQuotations();
+		return this.stockExchange.getCurrentQuotations();
 	}
 
 	private QuotationObject findCurrentQuotationByName(String name) {

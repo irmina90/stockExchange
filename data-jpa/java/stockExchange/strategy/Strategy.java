@@ -1,38 +1,32 @@
-package stockExchange.strategy.impl;
+package stockExchange.strategy;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import stockExchange.brocker.StockBrockerInfo;
-import stockExchange.strategy.GameStrategy;
 import stockExchange.to.OrderRequest;
 import stockExchange.to.QuotationObject;
 import stockExchange.to.WalletStock;
 import stockExchange.wallet.WalletInfo;
 
 @Component
-public class RiskyStrategy implements GameStrategy {
-	private final String name = "RISKY STRATEGY";
+public class Strategy {
 	private final boolean isBuy = true;
-	private final int minValue = 3;
-	private final int midValue = 8;
-	private final int maxValue = 15;
+	private final int maxAmount = 100;
 	private final BigDecimal five = new BigDecimal(5.0);
+
 	@Autowired
 	private StockBrockerInfo stockExchangeInfo;
 	@Autowired
 	private WalletInfo walletInfo;
 
-	public RiskyStrategy() {
+	public Strategy() {
 
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public WalletInfo getWalletInfo() {
@@ -51,14 +45,13 @@ public class RiskyStrategy implements GameStrategy {
 		this.stockExchangeInfo = stockExchangeInfo;
 	}
 
-	@Override
 	public List<OrderRequest> listOfRequests() {
 		if (getWalletInfo().walletIsEmpty() || lotOfMoney()) {
-			return createOrderStocksList(searchStocksFromStockExchange(getAmount(getAllCurrentQuotations().size())),
-					isBuy);
+			return createOrderStocksList(
+					searchStocksFromStockExchange(getRandomAmount(getAllCurrentQuotations().size())), isBuy);
 		} else {
 			return createOrderStocksList(
-					searchStocksFromWallet(getAmount(getWalletInfo().getStocksFromWallet().size())), !isBuy);
+					searchStocksFromWallet(getRandomAmount(getWalletInfo().getStocksFromWallet().size())), !isBuy);
 		}
 	}
 
@@ -72,25 +65,10 @@ public class RiskyStrategy implements GameStrategy {
 		return getStockExchangeInfo().getCurrentQuotations();
 	}
 
-	private int getAmount(int size) {
-		if (size < 10)
-			return minValue;
-		else if (size > 10 && size < 50)
-			return midValue;
-		return maxValue;
-	}
-
-	private int getAmount(BigDecimal price) {
-		if (price.compareTo(new BigDecimal(50)) <= 0)
-			return 100;
-		else
-			return 50;
-	}
-
 	private List<OrderRequest> createOrderStocksList(List<QuotationObject> stocks, boolean isBuy) {
 		List<OrderRequest> orderList = new ArrayList<OrderRequest>();
 		for (QuotationObject obj : stocks) {
-			orderList.add(createRequest(obj.getName(), getAmount(obj.getPrice()), isBuy, obj.getPrice()));
+			orderList.add(createRequest(obj.getName(), getRandomAmount(maxAmount), isBuy, obj.getPrice()));
 		}
 		return orderList;
 	}
@@ -108,7 +86,7 @@ public class RiskyStrategy implements GameStrategy {
 		for (WalletStock obj : getWalletInfo().getStocksFromWallet()) {
 			BigDecimal priceOnStockExchange = getPriceByName(obj.getObject().getName());
 			if (obj.getObject().getPrice().compareTo(priceOnStockExchange) <= 0) {
-				stocksToSell.add(new QuotationObject(obj.getObject().getName(), getPriceByName(name)));
+				stocksToSell.add(new QuotationObject(obj.getObject().getName(), priceOnStockExchange));
 			}
 		}
 		return stocksToSell;
@@ -125,6 +103,11 @@ public class RiskyStrategy implements GameStrategy {
 
 	private OrderRequest createRequest(String name, int amount, boolean isBuy, BigDecimal maxPrice) {
 		return new OrderRequest(name, amount, isBuy, maxPrice);
+	}
+
+	private int getRandomAmount(int max) {
+		Random randomGenerator = new Random();
+		return randomGenerator.nextInt(max);
 	}
 
 }

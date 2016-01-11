@@ -9,11 +9,10 @@
 
 	<context:component-scan base-package="stockExchange.loader" />
 	<context:component-scan base-package="stockExchange.repository" />
-	<context:component-scan base-package="stockExchange.service" />
 	<context:annotation-config />
 
 	<bean id="loader" class="stockExchange.loader.Loader">
-		<property name="source" value="C:/Users/wzietek/Desktop/data.csv" />
+		<property name="source" value="C:/Users/wzietek/Downloads/stockExchange/stockExchange/data-jpa/src/test/resources/dataExample.txt" />
 	</bean>
 
 </beans>

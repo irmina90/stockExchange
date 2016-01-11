@@ -18,7 +18,7 @@ public class Wallet {
 	private BigDecimal startWalletBalance;
 	@Autowired
 	private Strategy strategy;
-	
+
 	public Wallet() {
 
 	}
@@ -78,20 +78,13 @@ public class Wallet {
 	public void removeStocks(QuotationObject requestQuotation, int quantity) {
 		List<WalletStock> listStockToRemove = new ArrayList<WalletStock>();
 		for (Integer it = 0; it < stocks.size(); it++) {
-			
 			if (stocks.get(it).getObject().getName().equals(requestQuotation.getName())) {
-				
 				if (stocks.get(it).getQuantity() <= quantity) {
-					
 					listStockToRemove.add(stocks.get(it));
 					quantity = quantity - stocks.get(it).getQuantity();
-					
 				} else if (stocks.get(it).getQuantity() > quantity) {
-					
 					stocks.get(it).setQuantity(stocks.get(it).getQuantity() - quantity);
-					
 				}
-				
 			}
 		}
 		removeStocksInWallet(listStockToRemove);
@@ -127,5 +120,6 @@ public class Wallet {
 	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
 	}
+
 
 }

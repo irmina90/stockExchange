@@ -15,6 +15,7 @@ public class StockExchange {
 	private StockExchangeService service;
 	private List<String> days;
 	private List<QuotationObject> currentQuotations;
+	private String currentDate;
 	private int currentDayNumber;
 
 	public StockExchange() {
@@ -34,10 +35,10 @@ public class StockExchange {
 			return getDays().get(getCurrentDayNumber());
 	}
 
-	public boolean noMoreDays() {
+	public boolean noMoreDays(){
 		return getAmountOfDays() == getCurrentDayNumber();
 	}
-
+	
 	public String getNextDay() {
 		setCurrentDayNumber(getCurrentDayNumber() + 1);
 		if (noMoreDays())
@@ -52,7 +53,7 @@ public class StockExchange {
 		else
 			return getDays().size();
 	}
-
+	
 	public List<QuotationObject> getCurrentQuotations() {
 		return this.currentQuotations;
 	}

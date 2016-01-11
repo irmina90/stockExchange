@@ -8,5 +8,4 @@
 		resource="classpath:/stockExchange/common_configuration/CommonDatabase-context.xml" />
 	<import
 		resource="classpath:/stockExchange/common_configuration/CommonSpring-context.xml" />
-
 </beans>
